@@ -8,12 +8,13 @@
  * @module
  */
 
-export {
-  query,
-  mutation,
-  action,
-  internalQuery,
-  internalMutation,
-  internalAction,
-  httpAction,
-} from "convex/server";
+import { GenericQueryCtx, GenericMutationCtx, GenericActionCtx } from "convex/server";
+import { DataModel } from "./dataModel.js";
+
+export const query = (handler) => handler;
+export const mutation = (handler) => handler;
+export const action = (handler) => handler;
+export const internalQuery = (handler) => handler;
+export const internalMutation = (handler) => handler;
+export const internalAction = (handler) => handler;
+export const httpAction = (handler) => handler;
