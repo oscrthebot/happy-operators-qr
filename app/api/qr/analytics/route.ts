@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getQRAnalytics } from '@/lib/db';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
+
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const qrId = searchParams.get('qrId');
-    const days = parseInt(searchParams.get('days') || '30');
 
     if (!qrId) {
       return NextResponse.json(
@@ -14,7 +17,9 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const analytics = await getQRAnalytics(parseInt(qrId), days);
+    const analytics = await convex.query(api.qrCodes.getAnalytics, {
+      id: qrId as Id<"qrCodes">,
+    });
 
     return NextResponse.json({
       success: true,

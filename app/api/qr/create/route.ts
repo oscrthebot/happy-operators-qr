@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { nanoid } from 'nanoid';
 import QRCode from 'qrcode';
-import { createQRCode } from '@/lib/db';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '@/convex/_generated/api';
+
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,8 +33,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Save to database
-    const qrCode = await createQRCode(shortId, name, targetUrl, qrDataUrl);
+    // Save to Convex
+    const qrCode = await convex.mutation(api.qrCodes.create, {
+      name,
+      targetUrl,
+      shortId,
+      qrDataUrl,
+    });
 
     return NextResponse.json({
       success: true,

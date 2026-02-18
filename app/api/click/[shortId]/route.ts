@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getQRCodeByShortId, trackClick } from '@/lib/db';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '@/convex/_generated/api';
 import crypto from 'crypto';
+
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export async function GET(
   req: NextRequest,
@@ -9,32 +12,26 @@ export async function GET(
   try {
     const { shortId } = await params;
     
-    // Get QR code
-    const qrCode = await getQRCodeByShortId(shortId);
-
-    if (!qrCode) {
-      return NextResponse.json(
-        { error: 'QR code not found' },
-        { status: 404 }
-      );
-    }
-
-    // Track click
+    // Track click and get target URL
     const userAgent = req.headers.get('user-agent') || 'unknown';
     const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     
     // Hash IP for privacy
     const ipHash = crypto.createHash('sha256').update(ip).digest('hex');
 
-    await trackClick(qrCode.id, userAgent, ipHash);
+    const result = await convex.mutation(api.qrCodes.recordClick, {
+      shortId,
+      userAgent,
+      ipHash,
+    });
 
     // Redirect to target URL
-    return NextResponse.redirect(qrCode.target_url);
+    return NextResponse.redirect(result.targetUrl);
   } catch (error: any) {
     console.error('Click tracking error:', error);
     return NextResponse.json(
-      { error: 'Failed to track click' },
-      { status: 500 }
+      { error: 'QR code not found or tracking failed' },
+      { status: 404 }
     );
   }
 }
