@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, QrCode as QrCodeIcon, CursorClick, ChartLine, X } from 'phosphor-react';
+import { Plus, QrCode as QrCodeIcon, Cursor, ChartLine, X } from 'phosphor-react';
 import QRCodeCard from '@/components/QRCodeCard';
 import CreateQRForm from '@/components/CreateQRForm';
 
@@ -73,7 +73,7 @@ export default function Home() {
         </div>
         <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
           <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-1">
-            <CursorClick size={16} />
+            <Cursor size={16} />
             <div className="text-sm font-medium">Total Clicks</div>
           </div>
           <div className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">{totalClicks}</div>

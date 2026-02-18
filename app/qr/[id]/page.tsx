@@ -2,7 +2,7 @@
 
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, CalendarBlank, ChartLine, CursorClick, TrendUp } from 'phosphor-react';
+import { ArrowLeft, CalendarBlank, ChartLine, Cursor, TrendUp } from 'phosphor-react';
 import AnalyticsChart from '@/components/AnalyticsChart';
 
 interface QRCode {
@@ -137,7 +137,7 @@ export default function QRAnalyticsPage({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4">
             <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-1">
-              <CursorClick size={14} />
+              <Cursor size={14} />
               <p className="text-xs font-medium">Total Clicks</p>
             </div>
             <p className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{totalClicks}</p>
