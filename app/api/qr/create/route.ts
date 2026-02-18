@@ -41,6 +41,13 @@ export async function POST(req: NextRequest) {
       qrDataUrl,
     });
 
+    if (!qrCode) {
+      return NextResponse.json(
+        { error: 'Failed to create QR code' },
+        { status: 500 }
+      );
+    }
+
     // Transform to match frontend expectations
     return NextResponse.json({
       success: true,
