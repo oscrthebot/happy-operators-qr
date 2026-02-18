@@ -41,10 +41,16 @@ export async function POST(req: NextRequest) {
       qrDataUrl,
     });
 
+    // Transform to match frontend expectations
     return NextResponse.json({
       success: true,
       qrCode: {
-        ...qrCode,
+        id: qrCode._id,
+        short_id: qrCode.shortId,
+        name: qrCode.name,
+        target_url: qrCode.targetUrl,
+        qr_data_url: qrCode.qrDataUrl,
+        created_at: new Date(qrCode.createdAt).toISOString(),
         trackingUrl,
       },
     });
