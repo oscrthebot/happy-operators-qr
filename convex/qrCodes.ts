@@ -71,7 +71,10 @@ export const getById = query({
 
 // Get analytics for a QR code
 export const getAnalytics = query({
-  args: { id: v.id("qrCodes") },
+  args: { 
+    id: v.id("qrCodes"),
+    days: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     const qrCode = await ctx.db.get(args.id);
     if (!qrCode) {
@@ -83,24 +86,30 @@ export const getAnalytics = query({
       .withIndex("by_qrCode", (q) => q.eq("qrCodeId", args.id))
       .collect();
 
+    // Filter clicks by days if specified
+    const daysToShow = args.days || 30;
+    const cutoffDate = Date.now() - (daysToShow * 24 * 60 * 60 * 1000);
+    const recentClicks = clicks.filter(click => click.timestamp >= cutoffDate);
+
     // Group clicks by day
     const clicksByDay: Record<string, number> = {};
-    clicks.forEach((click) => {
+    recentClicks.forEach((click) => {
       const date = new Date(click.timestamp).toISOString().split("T")[0];
       clicksByDay[date] = (clicksByDay[date] || 0) + 1;
     });
 
-    // Convert to array for charting
-    const dailyClicks = Object.entries(clicksByDay)
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => a.date.localeCompare(b.date));
+    // Fill in missing days with 0 clicks
+    const result = [];
+    for (let i = daysToShow - 1; i >= 0; i--) {
+      const date = new Date(Date.now() - (i * 24 * 60 * 60 * 1000));
+      const dateStr = date.toISOString().split("T")[0];
+      result.push({
+        date: dateStr,
+        clicks: clicksByDay[dateStr] || 0,
+      });
+    }
 
-    return {
-      qrCode,
-      totalClicks: clicks.length,
-      dailyClicks,
-      recentClicks: clicks.slice(-10).reverse(),
-    };
+    return result;
   },
 });
 

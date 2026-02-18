@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Plus, QrCode as QrCodeIcon, CursorClick, ChartLine, X } from 'phosphor-react';
 import QRCodeCard from '@/components/QRCodeCard';
 import CreateQRForm from '@/components/CreateQRForm';
 
@@ -47,7 +47,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-neutral-200 border-t-primary"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-neutral-200 dark:border-neutral-700 border-t-primary"></div>
       </div>
     );
   }
@@ -58,23 +58,32 @@ export default function Home() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold text-neutral-900 mb-2">Dashboard</h1>
-        <p className="text-neutral-600">Manage and track your QR codes</p>
+        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Dashboard</h1>
+        <p className="text-neutral-600 dark:text-neutral-400">Manage and track your QR codes</p>
       </div>
 
       {/* Stats cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
-          <div className="text-sm font-medium text-neutral-600 mb-1">Total QR Codes</div>
-          <div className="text-3xl font-semibold text-neutral-900">{qrCodes.length}</div>
+        <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
+          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-1">
+            <QrCodeIcon size={16} />
+            <div className="text-sm font-medium">Total QR Codes</div>
+          </div>
+          <div className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">{qrCodes.length}</div>
         </div>
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
-          <div className="text-sm font-medium text-neutral-600 mb-1">Total Clicks</div>
-          <div className="text-3xl font-semibold text-neutral-900">{totalClicks}</div>
+        <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
+          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-1">
+            <CursorClick size={16} />
+            <div className="text-sm font-medium">Total Clicks</div>
+          </div>
+          <div className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">{totalClicks}</div>
         </div>
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
-          <div className="text-sm font-medium text-neutral-600 mb-1">Avg. Clicks</div>
-          <div className="text-3xl font-semibold text-neutral-900">
+        <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
+          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-1">
+            <ChartLine size={16} />
+            <div className="text-sm font-medium">Avg. Clicks</div>
+          </div>
+          <div className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">
             {qrCodes.length > 0 ? Math.round(totalClicks / qrCodes.length) : 0}
           </div>
         </div>
@@ -82,12 +91,22 @@ export default function Home() {
 
       {/* Action bar */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-neutral-900">QR Codes</h2>
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">QR Codes</h2>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className="bg-primary hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+          className="bg-primary hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm inline-flex items-center gap-2"
         >
-          {showCreateForm ? 'Cancel' : '+ Create New'}
+          {showCreateForm ? (
+            <>
+              <X size={16} weight="bold" />
+              Cancel
+            </>
+          ) : (
+            <>
+              <Plus size={16} weight="bold" />
+              Create New
+            </>
+          )}
         </button>
       </div>
 
@@ -100,13 +119,14 @@ export default function Home() {
 
       {/* QR Code grid */}
       {qrCodes.length === 0 ? (
-        <div className="text-center py-16 bg-white border border-neutral-200 rounded-xl">
-          <div className="text-6xl mb-4">📱</div>
-          <p className="text-neutral-600 text-lg mb-4">No QR codes yet</p>
+        <div className="text-center py-16 bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl">
+          <QrCodeIcon size={64} className="mx-auto mb-4 text-neutral-400" />
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg mb-4">No QR codes yet</p>
           <button
             onClick={() => setShowCreateForm(true)}
-            className="text-primary hover:underline font-medium"
+            className="text-primary hover:underline font-medium inline-flex items-center gap-2"
           >
+            <Plus size={16} />
             Create your first QR code
           </button>
         </div>

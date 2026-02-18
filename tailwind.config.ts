@@ -6,12 +6,28 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: '#FF6B6B',
-        secondary: '#4ECDC4',
-        accent: '#4ECDC4',
+        primary: {
+          DEFAULT: '#3B82F6', // Blue
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
+        },
+        accent: {
+          DEFAULT: '#FF8C42', // Happy Operators Orange
+          light: '#FFA666',
+          dark: '#E67832',
+        },
         neutral: {
           50: '#fafafa',
           100: '#f5f5f5',
@@ -23,10 +39,12 @@ const config: Config = {
           700: '#404040',
           800: '#262626',
           900: '#171717',
+          950: '#0a0a0a',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

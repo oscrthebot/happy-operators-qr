@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const qrId = searchParams.get('qrId');
+    const days = searchParams.get('days');
 
     if (!qrId) {
       return NextResponse.json(
@@ -19,6 +20,7 @@ export async function GET(req: NextRequest) {
 
     const analytics = await convex.query(api.qrCodes.getAnalytics, {
       id: qrId as Id<"qrCodes">,
+      days: days ? parseInt(days) : undefined,
     });
 
     return NextResponse.json({

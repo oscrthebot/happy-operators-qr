@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { DownloadSimple, Copy, ChartBar, Trash, Check } from 'phosphor-react';
 
 interface QRCodeCardProps {
   qrCode: {
@@ -56,31 +57,31 @@ export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
   };
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors">
+    <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-5 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors">
       {/* QR Code Image */}
       <div className="flex justify-center mb-4">
         <img
           src={qrCode.qr_data_url}
           alt={qrCode.name}
-          className="w-40 h-40 border border-neutral-200 rounded-lg"
+          className="w-40 h-40 border border-neutral-200 dark:border-neutral-700 rounded-lg"
         />
       </div>
 
       {/* Info */}
       <div className="mb-4">
-        <h3 className="text-base font-semibold text-neutral-900 mb-2">{qrCode.name}</h3>
+        <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-2">{qrCode.name}</h3>
         
-        <div className="text-sm text-neutral-600 space-y-1">
+        <div className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1">
           <p className="truncate text-xs">
-            <span className="font-medium text-neutral-700">Target:</span>{' '}
-            <span className="text-neutral-500">{qrCode.target_url}</span>
+            <span className="font-medium text-neutral-700 dark:text-neutral-300">Target:</span>{' '}
+            <span className="text-neutral-500 dark:text-neutral-400">{qrCode.target_url}</span>
           </p>
           <div className="flex items-center justify-between text-xs">
             <span>
-              <span className="font-medium text-neutral-700">Clicks:</span>{' '}
-              <span className="text-neutral-900 font-semibold">{qrCode.click_count || 0}</span>
+              <span className="font-medium text-neutral-700 dark:text-neutral-300">Clicks:</span>{' '}
+              <span className="text-neutral-900 dark:text-neutral-100 font-semibold">{qrCode.click_count || 0}</span>
             </span>
-            <span className="text-neutral-400">
+            <span className="text-neutral-400 dark:text-neutral-500">
               {new Date(qrCode.created_at).toLocaleDateString()}
             </span>
           </div>
@@ -92,33 +93,46 @@ export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
         <div className="flex gap-2">
           <button
             onClick={downloadQR}
-            className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="flex-1 bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center justify-center gap-2"
             title="Download PNG"
           >
-            ⬇️ Download
+            <DownloadSimple size={16} weight="bold" />
+            Download
           </button>
 
           <button
             onClick={copyTrackingUrl}
-            className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="flex-1 bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center justify-center gap-2"
             title="Copy tracking URL"
           >
-            {copied ? '✓ Copied!' : '📋 Copy URL'}
+            {copied ? (
+              <>
+                <Check size={16} weight="bold" />
+                Copied!
+              </>
+            ) : (
+              <>
+                <Copy size={16} weight="bold" />
+                Copy URL
+              </>
+            )}
           </button>
         </div>
 
         <Link
           href={`/qr/${qrCode.id}`}
-          className="block w-full bg-primary hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors text-center"
+          className="block w-full bg-primary hover:bg-primary-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors text-center inline-flex items-center justify-center gap-2"
         >
-          📊 View Analytics
+          <ChartBar size={16} weight="bold" />
+          View Analytics
         </Link>
 
         <button
           onClick={handleDelete}
-          className="w-full bg-white hover:bg-red-50 border border-neutral-200 hover:border-red-300 text-red-600 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="w-full bg-white dark:bg-neutral-950 hover:bg-red-50 dark:hover:bg-red-950/30 border border-neutral-200 dark:border-neutral-800 hover:border-red-300 dark:hover:border-red-800 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center justify-center gap-2"
         >
-          🗑️ Delete
+          <Trash size={16} weight="bold" />
+          Delete
         </button>
       </div>
     </div>

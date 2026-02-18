@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { TextT, Link as LinkIcon, Plus, SpinnerGap, Warning } from 'phosphor-react';
 
 export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
   const [name, setName] = useState('');
@@ -37,11 +38,12 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl p-6">
-      <h3 className="text-lg font-semibold text-neutral-900 mb-4">Create New QR Code</h3>
+    <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
+      <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Create New QR Code</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 flex items-center gap-2">
+            <TextT size={16} />
             Name
           </label>
           <input
@@ -49,13 +51,14 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g., Table 5, Menu, WiFi"
-            className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
+            className="w-full px-3 py-2 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 flex items-center gap-2">
+            <LinkIcon size={16} />
             Target URL
           </label>
           <input
@@ -63,13 +66,14 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
             value={targetUrl}
             onChange={(e) => setTargetUrl(e.target.value)}
             placeholder="https://example.com"
-            className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
+            className="w-full px-3 py-2 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
             required
           />
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+          <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+            <Warning size={16} />
             {error}
           </div>
         )}
@@ -77,9 +81,19 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary hover:bg-red-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="w-full bg-primary hover:bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm inline-flex items-center justify-center gap-2"
         >
-          {loading ? 'Creating...' : 'Create QR Code'}
+          {loading ? (
+            <>
+              <SpinnerGap size={16} className="animate-spin" />
+              Creating...
+            </>
+          ) : (
+            <>
+              <Plus size={16} weight="bold" />
+              Create QR Code
+            </>
+          )}
         </button>
       </form>
     </div>
