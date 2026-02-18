@@ -14,9 +14,10 @@ interface QRCodeCardProps {
     click_count: number;
     trackingUrl: string;
   };
+  onDelete?: () => void;
 }
 
-export default function QRCodeCard({ qrCode }: QRCodeCardProps) {
+export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
   const downloadQR = () => {
     const link = document.createElement('a');
     link.href = qrCode.qr_data_url;
@@ -27,6 +28,29 @@ export default function QRCodeCard({ qrCode }: QRCodeCardProps) {
   const copyTrackingUrl = () => {
     navigator.clipboard.writeText(qrCode.trackingUrl);
     alert('Tracking URL copied!');
+  };
+
+  const handleDelete = async () => {
+    if (!confirm(`Delete QR code "${qrCode.name}"? This cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/qr/delete?id=${qrCode.id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        alert('QR code deleted successfully!');
+        if (onDelete) onDelete();
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Failed to delete QR code');
+      }
+    } catch (error) {
+      alert('Failed to delete QR code');
+      console.error(error);
+    }
   };
 
   return (
@@ -74,6 +98,13 @@ export default function QRCodeCard({ qrCode }: QRCodeCardProps) {
         >
           View Analytics
         </Link>
+
+        <button
+          onClick={handleDelete}
+          className="w-full bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

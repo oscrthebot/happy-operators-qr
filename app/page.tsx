@@ -83,7 +83,7 @@ export default function Home() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {qrCodes.map((qr) => (
-            <QRCodeCard key={qr.id} qrCode={qr} />
+            <QRCodeCard key={qr.id} qrCode={qr} onDelete={loadQRCodes} />
           ))}
         </div>
       )}

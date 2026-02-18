@@ -131,3 +131,26 @@ export const recordClick = mutation({
     return { targetUrl: qrCode.targetUrl };
   },
 });
+
+// Delete a QR code
+export const deleteQRCode = mutation({
+  args: {
+    id: v.id("qrCodes"),
+  },
+  handler: async (ctx, args) => {
+    // Delete all clicks associated with this QR code
+    const clicks = await ctx.db
+      .query("clicks")
+      .withIndex("by_qrCode", (q) => q.eq("qrCodeId", args.id))
+      .collect();
+    
+    for (const click of clicks) {
+      await ctx.db.delete(click._id);
+    }
+    
+    // Delete the QR code
+    await ctx.db.delete(args.id);
+    
+    return { success: true };
+  },
+});
