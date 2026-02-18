@@ -1,0 +1,31 @@
+{
+  "name": "happy-operators-qr",
+  "version": "1.0.0",
+  "description": "QR Code Generator with Analytics for Happy Operators",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@vercel/postgres": "^0.10.0",
+    "qrcode": "^1.5.3",
+    "recharts": "^2.15.0",
+    "nanoid": "^5.0.10",
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.2",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "@types/qrcode": "^1.5.5"
+  }
+}
