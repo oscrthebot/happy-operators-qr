@@ -112,21 +112,28 @@ export const recordClick = mutation({
     ipHash: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    console.log("[Convex] Recording click for shortId:", args.shortId);
+    
     const qrCode = await ctx.db
       .query("qrCodes")
       .withIndex("by_shortId", (q) => q.eq("shortId", args.shortId))
       .first();
 
     if (!qrCode) {
+      console.error("[Convex] QR code not found:", args.shortId);
       throw new Error("QR code not found");
     }
 
-    await ctx.db.insert("clicks", {
+    console.log("[Convex] Found QR code:", qrCode.name, "Target:", qrCode.targetUrl);
+
+    const clickId = await ctx.db.insert("clicks", {
       qrCodeId: qrCode._id,
       timestamp: Date.now(),
-      userAgent: args.userAgent,
-      ipHash: args.ipHash,
+      userAgent: args.userAgent || "unknown",
+      ipHash: args.ipHash || "unknown",
     });
+
+    console.log("[Convex] Click recorded with ID:", clickId);
 
     return { targetUrl: qrCode.targetUrl };
   },

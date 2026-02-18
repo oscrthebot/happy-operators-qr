@@ -37,11 +37,11 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-bold mb-4">Create New QR Code</h3>
+    <div className="bg-white border border-neutral-200 rounded-xl p-6">
+      <h3 className="text-lg font-semibold text-neutral-900 mb-4">Create New QR Code</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
             Name
           </label>
           <input
@@ -49,13 +49,13 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g., Table 5, Menu, WiFi"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
             Target URL
           </label>
           <input
@@ -63,13 +63,13 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
             value={targetUrl}
             onChange={(e) => setTargetUrl(e.target.value)}
             placeholder="https://example.com"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
             required
           />
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
             {error}
           </div>
         )}
@@ -77,7 +77,7 @@ export default function CreateQRForm({ onSuccess }: { onSuccess: () => void }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50"
+          className="w-full bg-primary hover:bg-red-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {loading ? 'Creating...' : 'Create QR Code'}
         </button>

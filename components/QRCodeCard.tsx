@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { useState } from 'react';
 
 interface QRCodeCardProps {
   qrCode: {
@@ -18,6 +18,8 @@ interface QRCodeCardProps {
 }
 
 export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
+  const [copied, setCopied] = useState(false);
+
   const downloadQR = () => {
     const link = document.createElement('a');
     link.href = qrCode.qr_data_url;
@@ -25,13 +27,14 @@ export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
     link.click();
   };
 
-  const copyTrackingUrl = () => {
-    navigator.clipboard.writeText(qrCode.trackingUrl);
-    alert('Tracking URL copied!');
+  const copyTrackingUrl = async () => {
+    await navigator.clipboard.writeText(qrCode.trackingUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDelete = async () => {
-    if (!confirm(`Delete QR code "${qrCode.name}"? This cannot be undone.`)) {
+    if (!confirm(`Delete "${qrCode.name}"? This cannot be undone.`)) {
       return;
     }
 
@@ -41,7 +44,6 @@ export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
       });
 
       if (res.ok) {
-        alert('QR code deleted successfully!');
         if (onDelete) onDelete();
       } else {
         const data = await res.json();
@@ -54,56 +56,69 @@ export default function QRCodeCard({ qrCode, onDelete }: QRCodeCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors">
+      {/* QR Code Image */}
       <div className="flex justify-center mb-4">
         <img
           src={qrCode.qr_data_url}
           alt={qrCode.name}
-          className="w-48 h-48 border-2 border-gray-200 rounded"
+          className="w-40 h-40 border border-neutral-200 rounded-lg"
         />
       </div>
 
-      <h3 className="text-lg font-bold text-gray-900 mb-2">{qrCode.name}</h3>
-
-      <div className="text-sm text-gray-600 space-y-1 mb-4">
-        <p className="truncate">
-          <span className="font-medium">Target:</span> {qrCode.target_url}
-        </p>
-        <p>
-          <span className="font-medium">Clicks:</span> {qrCode.click_count || 0}
-        </p>
-        <p className="text-xs text-gray-500">
-          Created: {new Date(qrCode.created_at).toLocaleDateString()}
-        </p>
+      {/* Info */}
+      <div className="mb-4">
+        <h3 className="text-base font-semibold text-neutral-900 mb-2">{qrCode.name}</h3>
+        
+        <div className="text-sm text-neutral-600 space-y-1">
+          <p className="truncate text-xs">
+            <span className="font-medium text-neutral-700">Target:</span>{' '}
+            <span className="text-neutral-500">{qrCode.target_url}</span>
+          </p>
+          <div className="flex items-center justify-between text-xs">
+            <span>
+              <span className="font-medium text-neutral-700">Clicks:</span>{' '}
+              <span className="text-neutral-900 font-semibold">{qrCode.click_count || 0}</span>
+            </span>
+            <span className="text-neutral-400">
+              {new Date(qrCode.created_at).toLocaleDateString()}
+            </span>
+          </div>
+        </div>
       </div>
 
+      {/* Actions */}
       <div className="space-y-2">
-        <button
-          onClick={downloadQR}
-          className="w-full bg-secondary hover:bg-teal-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-        >
-          Download PNG
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={downloadQR}
+            className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            title="Download PNG"
+          >
+            ⬇️ Download
+          </button>
 
-        <button
-          onClick={copyTrackingUrl}
-          className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-        >
-          Copy Tracking URL
-        </button>
+          <button
+            onClick={copyTrackingUrl}
+            className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            title="Copy tracking URL"
+          >
+            {copied ? '✓ Copied!' : '📋 Copy URL'}
+          </button>
+        </div>
 
         <Link
           href={`/qr/${qrCode.id}`}
-          className="block w-full bg-primary hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center"
+          className="block w-full bg-primary hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors text-center"
         >
-          View Analytics
+          📊 View Analytics
         </Link>
 
         <button
           onClick={handleDelete}
-          className="w-full bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors"
+          className="w-full bg-white hover:bg-red-50 border border-neutral-200 hover:border-red-300 text-red-600 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
         >
-          Delete
+          🗑️ Delete
         </button>
       </div>
     </div>
